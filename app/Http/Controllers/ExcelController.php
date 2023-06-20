@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ExcelRequest;
+use App\Jobs\ParseExcelJob;
 use App\Services\ExcelParseService;
 use Illuminate\Http\Request;
 
@@ -17,7 +18,7 @@ class ExcelController extends Controller
     {
         $validated = $request->validated();
         $file = $excel_service->saveFile($validated['file']);
-        $excel_service->saveRows($file);
+        ParseExcelJob::dispatch($file);
 
         return back();
     }

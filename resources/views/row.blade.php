@@ -25,7 +25,7 @@
                             <tr>
                             <th scope="row">{{ $row->id }}</th>
                             <td>{{ $row->name }}</td>
-                            <td>{{ $row->created_at }}</td>
+                            <td>{{ $row->created_at->format('Y-m-d') }}</td>
                             </tr>
                         @endforeach
 

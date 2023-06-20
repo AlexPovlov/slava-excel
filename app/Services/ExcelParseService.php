@@ -3,11 +3,13 @@
 namespace App\Services;
 
 use App\Models\Row;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 
 class ExcelParseService
 {
@@ -54,19 +56,21 @@ class ExcelParseService
                 $value = $worksheet->getCell($col . $row)->getValue();
 
                 if (empty($value)) {
-                    // Storage::delete($file_name);
-                    throw new Exception("Не верно заполнено поле {$col}{$row}");
+                    Cache::forget($file_name);
+                    Storage::delete($file_name);
+                    Row::insert($inserting);
+                    return true;
                 }
 
                 if($col == 'B')
                     $inserting_row['name'] = $value;
                 if ($col == 'C')
-                    $inserting_row['created_at'] = $value;
+                    $inserting_row['created_at'] = Carbon::parse(Date::excelToDateTimeObject($value))->toDateTimeString();
             }
 
             $inserting[] = $inserting_row;
 
-            if(($highestRow < 1000 and $highestRow == $row) or $row == 1000){
+            if(($highestRow <= 1002 and $highestRow == $row) or $row == 1002){
                 Cache::add($file_name, $row, 1000);
                 Row::insert($inserting);
                 $inserting = [];
