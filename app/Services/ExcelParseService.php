@@ -70,7 +70,7 @@ class ExcelParseService
 
             $inserting[] = $inserting_row;
 
-            if(($highestRow <= 1002 and $highestRow == $row) or $row == 1002){
+            if(($highestRow < 1002 and $highestRow == $row) or $row == 1002){
                 Cache::add($file_name, $row, 1000);
                 Row::insert($inserting);
                 $inserting = [];
