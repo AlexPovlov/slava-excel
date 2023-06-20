@@ -6,7 +6,6 @@ use App\Models\Row;
 use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
@@ -14,7 +13,7 @@ class ExcelParseService
 {
     function saveFile(UploadedFile $file)
     {
-        $name = md5($file->getContent());//переделать создание названия, проблема если человек изменил файл при ошибке то это уже новый файл и грузится заново
+        $name = md5($file->getClientOriginalName());
         $extension = $file->extension();
         $file_name = $name . "." . $extension;
 
@@ -37,7 +36,6 @@ class ExcelParseService
         $highestColumn = $worksheet->getHighestColumn();
 
         if($highestColumn != 'C') {
-            Storage::delete($file_name);
             throw new Exception("Проверьте длину строк документа");
         }
 
@@ -69,7 +67,7 @@ class ExcelParseService
             $inserting[] = $inserting_row;
 
             if(($highestRow < 1000 and $highestRow == $row) or $row == 1000){
-                Cache::put($file_name, $row, 1000);
+                Cache::add($file_name, $row, 1000);
                 Row::insert($inserting);
                 $inserting = [];
             }
