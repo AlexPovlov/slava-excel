@@ -1,7 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { reactive } from "vue";
-import { router, useForm } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 
 defineProps({ errors: Object });
 
@@ -17,6 +16,7 @@ function sub({ target }) {
     form.clearErrors();
     target.reset();
 }
+
 </script>
 
 <template>
@@ -40,6 +40,7 @@ function sub({ target }) {
                             </div>
                             <input type="submit" class="mt-3 btn btn-primary" />
                         </form>
+                        <div>{{ files }}</div>
                     </div>
                 </div>
             </div>

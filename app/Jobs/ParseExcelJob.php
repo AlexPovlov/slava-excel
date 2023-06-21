@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Services\ExcelParseService;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,15 +13,15 @@ class ParseExcelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $file_name;
+    protected $file_path;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($file_name)
+    public function __construct($file_path)
     {
-        $this->file_name = $file_name;
+        $this->file_path = $file_path;
     }
 
     /**
@@ -32,6 +31,6 @@ class ParseExcelJob implements ShouldQueue
      */
     public function handle(ExcelParseService $excel_service)
     {
-        $excel_service->saveRows($this->file_name);
+        $excel_service->saveRows($this->file_path);
     }
 }
