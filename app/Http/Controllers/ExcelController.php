@@ -20,5 +20,7 @@ class ExcelController extends Controller
         $validated = $request->validated();
         $file = $excel_service->saveFile($validated['file']);
         ParseExcelJob::dispatch($file);
+
+        return back();
     }
 }
