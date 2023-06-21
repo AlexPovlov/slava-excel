@@ -91,7 +91,7 @@ class ExcelParseService
             }
 
             if ($highestRow == $row) {
-                $this->forgetCacheAndStorage($file_path, $cache_id);
+                // $this->forgetCacheAndStorage($file_path, $cache_id);
             }
         }
     }

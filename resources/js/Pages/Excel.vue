@@ -2,7 +2,16 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 
-defineProps({ errors: Object });
+const props = defineProps({
+    files: [],
+});
+
+onMounted(() => {
+    Echo.private(`excel`)
+    .listen('OrderShipmentStatusUpdated', (e) => {
+        console.log(e.order);
+    });
+});
 
 const form = useForm({
     file: null,
@@ -40,7 +49,7 @@ function sub({ target }) {
                             </div>
                             <input type="submit" class="mt-3 btn btn-primary" />
                         </form>
-                        <div>{{ files }}</div>
+                        <div>{{ props.files }}</div>
                     </div>
                 </div>
             </div>

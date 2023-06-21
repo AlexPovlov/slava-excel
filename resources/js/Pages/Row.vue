@@ -1,5 +1,8 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+const props = defineProps({
+    rows: [],
+});
 </script>
 
 <template>
@@ -38,7 +41,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr v-for="row in rows" :key="row.id">
+                                    <tr v-for="row in props.rows" :key="row">
                                         <th scope="row">{{ row.id }}</th>
                                         <td>{{ row.name }}</td>
                                         <td>{{ row.created_at }}</td>
