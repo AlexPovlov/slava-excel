@@ -55,7 +55,7 @@ class ExcelParseService
 
         $savedRows = $this->initCache($cache_id, $highestRow, $file_path);
         ExcelParseEvent::broadcast($cache_id, $savedRows);
-        
+
         for ($row = $savedRows['value']; $row <= $highestRow; ++$row) {
 
             for ($col = 'B'; $col != $highestColumn; ++$col) {
@@ -89,7 +89,6 @@ class ExcelParseService
                 }
 
                 $inserting = [];
-                // throw new Exception("Проверьте длину строк документа");
             }
 
             if ($highestRow == $row) {

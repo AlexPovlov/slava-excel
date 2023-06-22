@@ -25,6 +25,10 @@ function sub({ target }) {
     form.clearErrors();
     target.reset();
 }
+
+function percent(file) {
+    return (file.value / file.count) * 100;
+}
 </script>
 
 <template>
@@ -48,7 +52,23 @@ function sub({ target }) {
                             </div>
                             <input type="submit" class="mt-3 btn btn-primary" />
                         </form>
-                        <div>{{ files }}</div>
+                        <div v-for="file in files" :key="file">
+                            <div>
+                                <p class="mt-3">{{ file.path }}</p>
+                                <div class="progress">
+                                    <div
+                                        class="progress-bar progress-bar-striped progress-bar-animated"
+                                        role="progressbar"
+                                        aria-valuenow="75"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                        :style="{
+                                            width: percent(file) + '%',
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
