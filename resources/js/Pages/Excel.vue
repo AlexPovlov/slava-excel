@@ -3,12 +3,12 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 import { onMounted, reactive } from "vue";
 
-const filesq = reactive({});
+const files = reactive({});
 
 onMounted(() => {
     Echo.channel(`excel`).listen("ExcelParseEvent", (e) => {
-        filesq[e.id] = e.file;
-        console.log(filesq[e.id]);
+        files[e.id] = e.file;
+        console.log(files[e.id]);
     });
 });
 
@@ -48,7 +48,7 @@ function sub({ target }) {
                             </div>
                             <input type="submit" class="mt-3 btn btn-primary" />
                         </form>
-                        <div>{{ filesq }}</div>
+                        <div>{{ files }}</div>
                     </div>
                 </div>
             </div>
