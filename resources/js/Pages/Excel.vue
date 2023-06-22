@@ -3,10 +3,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 import { onMounted, reactive } from "vue";
 
-const props = defineProps({
-    files: {},
-});
-
 const filesq = reactive({});
 
 onMounted(() => {
@@ -52,7 +48,6 @@ function sub({ target }) {
                             </div>
                             <input type="submit" class="mt-3 btn btn-primary" />
                         </form>
-                        <div>{{ props.files }}</div>
                         <div>{{ filesq }}</div>
                     </div>
                 </div>

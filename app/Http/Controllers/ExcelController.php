@@ -13,16 +13,7 @@ class ExcelController extends Controller
 {
     function index()
     {
-        $redis = Redis::connection('cache');
-        $keys = $redis->keys('*excel_file*');
-
-        $files = [];
-
-        foreach ($keys as $key) {
-            $files[$key] = json_decode($redis->get($key));
-        }
-
-        return Inertia::render('Excel', compact('files'));
+        return Inertia::render('Excel');
     }
 
     function store(ExcelRequest $request, ExcelParseService $excel_service)

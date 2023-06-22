@@ -54,7 +54,8 @@ class ExcelParseService
         $cache_id = 'excel_file_' . md5($file_path);
 
         $savedRows = $this->initCache($cache_id, $highestRow, $file_path);
-        // dd($savedRows['value']);
+        ExcelParseEvent::broadcast($cache_id, $savedRows);
+        
         for ($row = $savedRows['value']; $row <= $highestRow; ++$row) {
 
             for ($col = 'B'; $col != $highestColumn; ++$col) {
@@ -92,7 +93,7 @@ class ExcelParseService
             }
 
             if ($highestRow == $row) {
-                // $this->forgetCacheAndStorage($file_path, $cache_id);
+                $this->forgetCacheAndStorage($file_path, $cache_id);
             }
         }
     }
