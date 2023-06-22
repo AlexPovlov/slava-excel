@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Events\ExcelParseEvent;
 use App\Models\Row;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -76,12 +76,13 @@ class ExcelParseService
             if($highestRow == $row or $row % 1002 == 0){
                 try {
                     Row::insert($inserting);
-
-                    $this->redis->setex($cache_id, 1000, json_encode([
+                    $file_data = [
                         'count' => $highestRow,
                         'path' => $file_path,
                         'value' => $row
-                    ]));
+                    ];
+                    $this->redis->setex($cache_id, 1000, json_encode($file_data));
+                    ExcelParseEvent::broadcast($cache_id, $file_data);
                 } catch (\Throwable $th) {
                     throw $th;
                 }

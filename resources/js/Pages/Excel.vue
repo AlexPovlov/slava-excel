@@ -1,15 +1,18 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm } from "@inertiajs/vue3";
+import { onMounted, reactive } from "vue";
 
 const props = defineProps({
-    files: [],
+    files: {},
 });
 
+const filesq = reactive({});
+
 onMounted(() => {
-    Echo.private(`excel`)
-    .listen('OrderShipmentStatusUpdated', (e) => {
-        console.log(e.order);
+    Echo.channel(`excel`).listen("ExcelParseEvent", (e) => {
+        filesq[e.id] = e.file;
+        console.log(filesq[e.id]);
     });
 });
 
@@ -20,12 +23,12 @@ const form = useForm({
 function upload_file({ target }) {
     form.file = target.files[0];
 }
+
 function sub({ target }) {
     form.post(route("excel.store"));
     form.clearErrors();
     target.reset();
 }
-
 </script>
 
 <template>
@@ -50,6 +53,7 @@ function sub({ target }) {
                             <input type="submit" class="mt-3 btn btn-primary" />
                         </form>
                         <div>{{ props.files }}</div>
+                        <div>{{ filesq }}</div>
                     </div>
                 </div>
             </div>

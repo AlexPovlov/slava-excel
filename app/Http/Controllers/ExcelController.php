@@ -18,8 +18,9 @@ class ExcelController extends Controller
 
         $files = [];
 
-        if(!empty($keys))
-            $files = $redis->mget($keys);
+        foreach ($keys as $key) {
+            $files[$key] = json_decode($redis->get($key));
+        }
 
         return Inertia::render('Excel', compact('files'));
     }
