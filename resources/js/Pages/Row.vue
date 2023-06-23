@@ -1,8 +1,33 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import axios from "axios";
+import { onMounted, ref } from "vue";
+
 const props = defineProps({
     rows: [],
 });
+
+onMounted(() => {
+    Echo.private(`model`).listen(`.RowCreated`, ({ model }) => {
+        props.rows.push(model);
+    });
+});
+
+const row = { name: null };
+const errors = ref({});
+
+const addRow = () => {
+    axios
+        .post(route("row.store"), row)
+        .then(() => {
+            errors.value = {};
+            row.name = null;
+        })
+        .catch(({ response }) => {
+            console.log(response.data.errors);
+            errors.value = response.data.errors;
+        });
+};
 </script>
 
 <template>
@@ -12,24 +37,29 @@ const props = defineProps({
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div class="p-6 text-gray-900">
                         <div>
-                            <form action="" method="post">
-                                <label for="formName" class="form-label"
-                                    >Excel file</label
-                                >
-                                <input
-                                    class="form-control"
-                                    type="text"
-                                    placeholder="Name"
-                                    id="formName"
-                                    name="name"
-                                />
-                                <button
-                                    type="submit"
-                                    class="mt-3 mb-3 btn btn-primary"
-                                >
-                                    Добавить
-                                </button>
-                            </form>
+                            <label for="formName" class="form-label"
+                                >Name</label
+                            >
+                            <input
+                                class="form-control mb-2"
+                                type="text"
+                                placeholder="Name"
+                                id="formName"
+                                name="name"
+                                v-model="row.name"
+                            />
+
+                            <div v-for="error in errors?.name" :key="error">
+                                <p class="text-danger">{{ error }}</p>
+                            </div>
+
+                            <button
+                                @click="addRow()"
+                                type="submit"
+                                class="mb-3 btn btn-primary"
+                            >
+                                Добавить
+                            </button>
                         </div>
                         <div>
                             <table class="table">

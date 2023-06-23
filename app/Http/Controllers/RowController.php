@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\RowAddEvent;
 use App\Http\Requests\RowRequest;
 use App\Models\Row;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class RowController extends Controller
@@ -19,5 +19,8 @@ class RowController extends Controller
     function store(RowRequest $request)
     {
         $validated = $request->validated();
+        Row::create($validated);
+
+        return ['success' => true];
     }
 }

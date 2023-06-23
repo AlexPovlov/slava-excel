@@ -6,9 +6,8 @@ import { onMounted, reactive } from "vue";
 const files = reactive({});
 
 onMounted(() => {
-    Echo.channel(`excel`).listen("ExcelParseEvent", (e) => {
+    Echo.private(`excel`).listen("ExcelParseEvent", (e) => {
         files[e.id] = e.file;
-        console.log(files[e.id]);
     });
 });
 

@@ -35,6 +35,6 @@ class ExcelParseEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('excel');
+        return new PrivateChannel('excel');
     }
 }
